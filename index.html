@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期时间语音播放</title>
+</head>
+<body>
+    <h1>点击按钮播放当前日期和时间</h1>
+    <button onclick="speakTime()">播放当前日期和时间</button>
+
+    <script>
+        function speakTime() {
+            // 获取当前日期和时间
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const day = now.getDate();
+            const month = now.getMonth() + 1; // JavaScript的月份是从0开始的
+            const year = now.getFullYear();
+
+            // 构造时间文本
+            const timeText = `现在是 ${year} 年 ${month} 月 ${day} 日，${hours} 点 ${minutes} 分 ${seconds} 秒。`;
+
+            // 使用SpeechSynthesis播放文本
+            const speech = new SpeechSynthesisUtterance(timeText);
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
+</body>
+</html>
