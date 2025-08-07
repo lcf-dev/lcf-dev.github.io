@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>语音播放日期和时间</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+      padding: 30px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      font-size: 40px;
+      padding: 15px 30px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>点击按钮播放日期和时间</h1>
+    <button onclick="playDateTime()">播放日期时间</button>
+  </div>
+
+  <script>
+    function playDateTime() {
+      // 获取当前日期和时间
+      const currentDate = new Date();
+      const hours = currentDate.getHours();
+      const minutes = currentDate.getMinutes();
+      const day = currentDate.getDate();
+      const month = currentDate.getMonth() + 1; // 月份从0开始
+      const year = currentDate.getFullYear();
+
+      // 格式化时间为语音播放的内容
+      const dateTimeText = `现在是 ${year}年${month}月${day}日，${hours}点${minutes}分`;
+
+      // 创建语音合成对象
+      const utterance = new SpeechSynthesisUtterance(dateTimeText);
+
+      // 设置语言为中文
+      utterance.lang = "zh-CN";
+
+      // 播放语音
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
