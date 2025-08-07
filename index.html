@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>语音播报日期时间</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义颜色和字体 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .btn-press {
+        transform: scale(0.95);
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen flex flex-col items-center justify-center p-4 font-sans">
+  
+  <!-- 页面标题 -->
+  <header class="text-center mb-10">
+    <h1 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold text-gray-800 mb-2">语音播报</h1>
+    <p class="text-gray-600 text-[clamp(1rem,3vw,1.2rem)]">点击下方按钮，聆听当前日期和时间</p>
+  </header>
+  
+  <!-- 主内容区 -->
+  <main class="flex flex-col items-center justify-center w-full max-w-md">
+    <!-- 日期时间显示 -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-10 w-full text-center transform transition-all duration-300 hover:shadow-xl">
+      <div id="date" class="text-[clamp(1.2rem,4vw,1.5rem)] text-gray-700 mb-3"></div>
+      <div id="time" class="text-[clamp(1.8rem,6vw,2.5rem)] font-bold text-primary"></div>
+    </div>
+    
+    <!-- 大尺寸语音播报按钮 -->
+    <button id="speakBtn" class="w-[clamp(120px,40vw,200px)] h-[clamp(120px,40vw,200px)] rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg flex items-center justify-center transition-all duration-300 active:btn-press mb-8 animate-float">
+      <i class="fa fa-volume-up text-[clamp(3rem,10vw,5rem)]"></i>
+    </button>
+    
+    <!-- 额外功能按钮组 -->
+    <div class="grid grid-cols-2 gap-4 w-full">
+      <button id="speakDateBtn" class="bg-secondary hover:bg-secondary/90 text-white py-4 px-6 rounded-xl shadow transition-all duration-300 active:btn-press flex items-center justify-center">
+        <i class="fa fa-calendar mr-2"></i>
+        <span class="text-[clamp(1rem,3vw,1.2rem)]">播报日期</span>
+      </button>
+      <button id="speakTimeBtn" class="bg-accent hover:bg-accent/90 text-white py-4 px-6 rounded-xl shadow transition-all duration-300 active:btn-press flex items-center justify-center">
+        <i class="fa fa-clock-o mr-2"></i>
+        <span class="text-[clamp(1rem,3vw,1.2rem)]">播报时间</span>
+      </button>
+    </div>
+  </main>
+  
+  <!-- 页脚信息 -->
+  <footer class="mt-16 text-center text-gray-500 text-sm">
+    <p></p>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const speakBtn = document.getElementById('speakBtn');
+    const speakDateBtn = document.getElementById('speakDateBtn');
+    const speakTimeBtn = document.getElementById('speakTimeBtn');
+    const dateElement = document.getElementById('date');
+    const timeElement = document.getElementById('time');
+    
+    // 更新日期时间显示
+    function updateDateTime() {
+      const now = new Date();
+      
+      // 格式化日期
+      const optionsDate = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      const dateStr = now.toLocaleDateString('zh-CN', optionsDate);
+      
+      // 格式化时间
+      const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const timeStr = now.toLocaleTimeString('zh-CN', optionsTime);
+      
+      // 更新DOM
+      dateElement.textContent = dateStr;
+      timeElement.textContent = timeStr;
+    }
+    
+    // 初始化时更新一次
+    updateDateTime();
+    // 每秒更新一次时间
+    setInterval(updateDateTime, 1000);
+    
+    // 语音播报函数
+    function speak(text) {
+      // 检查浏览器是否支持语音合成
+      if ('speechSynthesis' in window) {
+        // 停止任何正在进行的语音
+        window.speechSynthesis.cancel();
+        
+        // 创建语音实例
+        const utterance = new SpeechSynthesisUtterance(text);
+        // 设置语言
+        utterance.lang = 'zh-CN';
+        // 设置音量
+        utterance.volume = 1;
+        // 设置语速
+        utterance.rate = 1;
+        // 设置音调
+        utterance.pitch = 1;
+        
+        // 播放语音
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert('抱歉，您的浏览器不支持语音合成功能');
+      }
+    }
+    
+    // 播报日期时间
+    function speakDateTime() {
+      const now = new Date();
+      const optionsDate = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      
+      const dateStr = now.toLocaleDateString('zh-CN', optionsDate);
+      const timeStr = now.toLocaleTimeString('zh-CN', optionsTime);
+      
+      speak(`现在是${dateStr}，${timeStr}`);
+    }
+    
+    // 仅播报日期
+    function speakDate() {
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      const dateStr = now.toLocaleDateString('zh-CN', options);
+      speak(`今天是${dateStr}`);
+    }
+    
+    // 仅播报时间
+    function speakTime() {
+      const now = new Date();
+      const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const timeStr = now.toLocaleTimeString('zh-CN', options);
+      speak(`现在时间是${timeStr}`);
+    }
+    
+    // 绑定按钮事件
+    speakBtn.addEventListener('click', speakDateTime);
+    speakDateBtn.addEventListener('click', speakDate);
+    speakTimeBtn.addEventListener('click', speakTime);
+    
+    // 添加按钮点击动画效果
+    [speakBtn, speakDateBtn, speakTimeBtn].forEach(btn => {
+      btn.addEventListener('mousedown', () => btn.classList.add('btn-press'));
+      btn.addEventListener('mouseup', () => btn.classList.remove('btn-press'));
+      btn.addEventListener('mouseleave', () => btn.classList.remove('btn-press'));
+      
+      // 触摸设备支持
+      btn.addEventListener('touchstart', () => btn.classList.add('btn-press'));
+      btn.addEventListener('touchend', () => btn.classList.remove('btn-press'));
+    });
+    
+    // 页面加载完成后请求语音合成权限（部分浏览器需要用户交互才能使用语音合成）
+    window.addEventListener('load', () => {
+      // 引导用户点击以获得权限
+      speakBtn.classList.add('animate-pulse');
+      setTimeout(() => speakBtn.classList.remove('animate-pulse'), 3000);
+    });
+  </script>
+</body>
+</html>
