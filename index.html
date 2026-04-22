@@ -63,11 +63,29 @@
           </ul>
         </div>
         <div class="hero-visual" aria-hidden="true">
-          <div class="disk disk-a"></div>
-          <div class="disk disk-b"></div>
+          <div class="carousel">
+            <div class="carousel-track">
+              <div class="carousel-slide active">
+                <img src="file:///Users/curry/Downloads/daa9dc8f6645d60b2f59910c9dd0828a.jpg" alt="企业级存储设备">
+              </div>
+              <div class="carousel-slide">
+                <img src="file:///Users/curry/Downloads/a0b55ef2802356a86e8143f2ae188c2f.jpg" alt="数据中心">
+              </div>
+              <div class="carousel-slide">
+                <img src="file:///Users/curry/Downloads/ce3185b2ba68b6e7e755b5a45ab343ce.jpg" alt="存储芯片">
+              </div>
+              
+            </div>
+            <div class="carousel-indicators">
+              <button class="indicator active" data-index="0"></button>
+              <button class="indicator" data-index="1"></button>
+              <button class="indicator" data-index="2"></button>
+              <button class="indicator" data-index="3"></button>
+            </div>
+          </div>
           <div class="data-panel">
             <span>Enterprise HDD</span>
-            <strong>18TB / 22TB / 24TB</strong>
+            <strong>1.92T / 3.84T / 7.68T</strong>
             <small>高可靠企业级容量盘</small>
           </div>
         </div>
@@ -179,6 +197,9 @@
           <p>
            公司总部设在深圳，服务范围覆盖珠三角、华中、华南及全国多个重点工业城市， 持续为系统集成商、设备厂商与渠道客户提供稳定可靠的采购支持。
           </p>
+          <p>
+           公司总部设在深圳，服务范围覆盖珠三角、华中、华南及全国多个重点工业城市， 持续为系统集成商、设备厂商与渠道客户提供稳定可靠的采购支持。
+          </p>
           <div class="stats">
             <div>
               <strong>10+</strong>
@@ -243,7 +264,7 @@
             <span class="news-tag">行业观察</span>
             <h3>企业级大容量硬盘需求持续增长，冷数据存储成为重点方向</h3>
             <p>
-              在 AI、视频归档与云备份等业务推动下,高容量硬盘仍是成本与容量平衡的重要方案,
+              在 AI、视频归档与云备份等业务推动下，高容量硬盘仍是成本与容量平衡的重要方案，
               企业采购正更加关注稳定供货与质保能力。
             </p>
             <a href="#contact">了解更多</a>
@@ -272,7 +293,9 @@
           <p>
             回收呆滞库存-固态硬盘、SSD颗料、DDR颗粒、flash、LPDDR、EMMC、内存卡【TF卡,SD卡,CF卡】GDDR 内存闪存等一切库存呆滞电子元器件。
           </p>
-          <p>如需企业采购、渠道合作、项目配套、库存回收与技术支持，欢迎联系我们的销售团队。</p>
+          <p>
+            如需企业采购、渠道合作、项目配套、库存回收与技术支持，欢迎联系我们的销售团队。
+          </p>
         </div>
         <div class="contact-details">
           <p><strong>联系人：</strong>罗先生</p>
@@ -288,8 +311,41 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© 2026 深圳市启帆汇芯电子有限公司 版权所有</p>
-      <p>主营业务：固态硬盘 / SSD颗粒 / DDR颗粒 / Flash / LPDDR / EMMC / 内存卡 / 处理工厂呆滞物料 </p>
+      <p>主营业务：固态硬盘 / SSD颗粒 / DDR颗粒 / Flash / LPDDR / EMMC / 内存卡 / 处理工厂呆滞物料</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      const track = document.querySelector('.carousel-track');
+      const slides = document.querySelectorAll('.carousel-slide');
+      const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+      let current = 0;
+      let timer;
+
+      function goTo(index) {
+        slides[current].classList.remove('active');
+        indicators[current].classList.remove('active');
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        indicators[current].classList.add('active');
+        track.style.transform = `translateX(-${current * 100}%)`;
+      }
+
+      function next() {
+        goTo(current + 1);
+      }
+
+      indicators.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          clearInterval(timer);
+          goTo(parseInt(this.dataset.index, 10));
+          timer = setInterval(next, 4000);
+        });
+      });
+
+      timer = setInterval(next, 4000);
+    })();
+  </script>
 </body>
 </html>
