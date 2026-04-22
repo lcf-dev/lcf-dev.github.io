@@ -13,6 +13,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
+  <script>
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(track.children);
+let currentIndex = 0;
+
+function goToSlide(index) {
+  track.style.transform = `translateX(-${index * 100}%)`;
+}
+
+// 自动轮播，每5秒切换一次
+setInterval(() => {
+  currentIndex = (currentIndex + 1) % slides.length;
+  goToSlide(currentIndex);
+}, 5000);
+</script>
 <body>
   <header class="site-header">
     <div class="topbar">
